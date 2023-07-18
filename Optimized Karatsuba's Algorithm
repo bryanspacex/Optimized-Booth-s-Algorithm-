@@ -1,0 +1,43 @@
+public class KaratsubaMultiplication {
+    public static long karatsubaMultiply(long x, long y) {
+        // Base case: If either x or y is less than 10, perform simple multiplication
+        if (x < 10 || y < 10) {
+            return x * y;
+        }
+
+        // Calculate the length of the numbers
+        int n = Math.max(Long.toString(x).length(), Long.toString(y).length());
+        // Calculate the half length
+        int half = (n + 1) / 2;
+
+        // Compute the power of 10 for the half length
+        long powerOfTenHalf = (long) Math.pow(10, half);
+
+        // Split the numbers into a, b, c, d parts
+        long a = x / powerOfTenHalf;
+        long b = x % powerOfTenHalf;
+        long c = y / powerOfTenHalf;
+        long d = y % powerOfTenHalf;
+
+        // Recursive calls to perform Karatsuba multiplication on a, b, c, d parts
+        long ac = karatsubaMultiply(a, c);
+        long bd = karatsubaMultiply(b, d);
+        long adbc = karatsubaMultiply((a + b), (c + d)) - ac - bd;
+
+        // Combine the results using the Karatsuba formula
+        return (ac * (powerOfTenHalf * powerOfTenHalf)) + (adbc * powerOfTenHalf) + bd;
+    }
+
+    public static void main(String[] args) {
+        // Input numbers
+        long x = 12;
+        long y = 2;
+
+        // Perform Karatsuba multiplication
+        long product = karatsubaMultiply(x, y);
+
+        // Print the result
+        System.out.println("Product: " + product);
+    }
+}
+
