@@ -1,0 +1,34 @@
+public class MES {
+    // Function to calculate the maximum equilibrium sum
+    public static int getMaxEquilibriumSumOptimized(int[] arr) {
+        int totalSum = 0;       // Total sum of the array elements
+        int leftSum = 0;        // Sum of the left subarray
+        int maxSum = Integer.MIN_VALUE;    // Maximum equilibrium sum
+        
+        // Calculate the total sum of the array
+        for (int num : arr) {
+            totalSum += num;
+        }
+
+        // Iterate through the array elements
+        for (int num : arr) {
+            totalSum -= num;    // Decrease the total sum by the current element
+            
+            // If the left sum is equal to the remaining sum and greater than the current max sum
+            if (leftSum == totalSum) {
+                maxSum = Math.max(maxSum, leftSum);    // Update the max sum
+            }
+            
+            leftSum += num;     // Add the current element to the left sum
+        }
+
+        return maxSum;     // Return the maximum equilibrium sum
+    }
+
+    // Main method
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 4, 3, 2, 1};
+        int maxSum = getMaxEquilibriumSumOptimized(arr);
+        System.out.println("Max Equilibrium Sum: " + maxSum);
+    }
+}
