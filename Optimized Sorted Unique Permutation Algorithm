@@ -1,0 +1,38 @@
+import java.util.Arrays;
+
+public class Permutations {
+    public static void main(String[] args) {
+        String input = "BAC";
+        permute(input.toCharArray(), 0);
+    }
+
+    public static void permute(char[] chars, int index) {
+        if (index == chars.length - 1) {
+            System.out.println(String.valueOf(chars));
+            return;
+        }
+
+        boolean[] used = new boolean[26]; // Assuming only lowercase alphabets
+
+        for (int i = index; i < chars.length; i++) {
+            char currentChar = chars[i];
+            int charIndex = currentChar - 'A'; // Convert to 0-based index
+
+            if (used[charIndex]) {
+                continue; // Skip duplicates
+            }
+
+            used[charIndex] = true;
+            swap(chars, index, i);
+            permute(chars, index + 1);
+            swap(chars, index, i);
+            used[charIndex] = false; // Reset the used flag for backtracking
+        }
+    }
+
+    public static void swap(char[] chars, int i, int j) {
+        char temp = chars[i];
+        chars[i] = chars[j];
+        chars[j] = temp;
+    }
+}
