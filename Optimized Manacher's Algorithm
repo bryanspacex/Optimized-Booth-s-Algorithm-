@@ -1,0 +1,47 @@
+import java.util.*;
+class Prep {
+    static String findLongestPalindromicString(String text) {
+        int N = text.length();
+        if (N == 0) return "";
+
+        StringBuilder modifiedText = new StringBuilder();
+        for (char c : text.toCharArray()) {
+            modifiedText.append('#').append(c);
+        }
+        modifiedText.append('#');
+
+        N = modifiedText.length();
+        int[] L = new int[N];
+        L[0] = 0;
+        L[1] = 1;
+        int C = 1, R = 2, maxLPSLength = 0, maxLPSCenterPosition = 0;
+
+        for (int i = 2; i < N; i++) {
+            int iMirror = 2 * C - i;
+            L[i] = (R > i) ? Math.min(L[iMirror], R - i) : 0;
+
+            while ((i + L[i] + 1 < N && i - L[i] > 0) && modifiedText.charAt(i + L[i] + 1) == modifiedText.charAt(i - L[i] - 1)) {
+                L[i]++;
+            }
+
+            if (L[i] > maxLPSLength) {
+                maxLPSLength = L[i];
+                maxLPSCenterPosition = i;
+            }
+
+            if (i + L[i] > R) {
+                C = i;
+                R = i + L[i];
+            }
+        }
+
+        int start = (maxLPSCenterPosition - maxLPSLength) / 2;
+        return text.substring(start, start + maxLPSLength);
+    }
+
+    public static void main(String[] args) {
+        String text = "babad";
+        String result = findLongestPalindromicString(text);
+        System.out.println("Longest Palindromic Substring: " + result);
+    }
+}
