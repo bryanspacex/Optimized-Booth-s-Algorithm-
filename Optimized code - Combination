@@ -1,0 +1,56 @@
+import java.util.*;
+
+public class CombinationExample {
+
+    static Map<Pair, Long> memo = new HashMap<>();
+
+    static long calculateCombination(int n, int r) {
+        r = Math.min(r, n - r); // Using symmetry of the formula (nCr = nC(n-r))
+
+        if (r == 0) return 1;
+        if (r == 1) return n;
+
+        Pair pair = new Pair(n, r);
+        if (memo.containsKey(pair)) {
+            return memo.get(pair);
+        }
+
+        long result = calculateCombination(n - 1, r - 1) * n / r;
+        memo.put(pair, result);
+
+        return result;
+    }
+
+    public static void main(String args[]) {
+
+        List<Integer> numbers = Arrays.asList(9, 12, 19, 61, 19);
+        int r = 2;
+
+        long result = calculateCombination(numbers.size(), r);
+
+        System.out.println("The combination value for the numbers list is: " + result);
+    }
+
+    static class Pair {
+        int n;
+        int r;
+
+        Pair(int n, int r) {
+            this.n = n;
+            this.r = r;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(n, r);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            Pair other = (Pair) obj;
+            return n == other.n && r == other.r;
+        }
+    }
+}
