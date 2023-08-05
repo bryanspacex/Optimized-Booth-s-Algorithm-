@@ -1,0 +1,47 @@
+public class NQueenProblem {
+    final int N = 4;
+
+    void printSolution(int[] board) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                System.out.print(((board[i] & (1 << j)) != 0) ? " 1 " : " 0 ");
+            }
+            System.out.println();
+        }
+    }
+
+    boolean solveNQUtil(int[] board, int col, int ld, int rd) {
+        if (col == N) {
+            return true;
+        }
+
+        int safe = ~(ld | board[col] | rd) & ((1 << N) - 1);
+
+        while (safe > 0) {
+            int pos = safe & -safe;
+            safe -= pos;
+            board[col] = pos;
+
+            if (solveNQUtil(board, col + 1, (ld | pos) << 1, (rd | pos) >> 1)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    boolean solveNQ() {
+        int[] board = new int[N];
+        if (!solveNQUtil(board, 0, 0, 0)) {
+            System.out.print("Solution does not exist");
+            return false;
+        }
+        printSolution(board);
+        return true;
+    }
+
+    public static void main(String[] args) {
+        NQueenProblem queen = new NQueenProblem();
+        queen.solveNQ();
+    }
+}
